@@ -13,6 +13,8 @@ Merb::Config.use do |c|
   # cookie session store configuration
   c[:session_secret_key]  = 'c81b212ccf1f7b5fbd0568ef195ea4c23d4f2669'  # required for cookie session store
   c[:session_id_key] = '_partage_session_id' # cookie session id key, defaults to "_session_id"
+  
+  c[:upload_dir] = Merb.root / "uploads"
 end
  
 Merb::BootLoader.before_app_loads do
@@ -21,4 +23,8 @@ end
  
 Merb::BootLoader.after_app_loads do
   # This will get executed after your app's classes have been loaded.
+  require 'ftools'
+  (0..255).each {|n|
+    File.makedirs(Merb::Config[:upload_dir] / "%02x" % n)
+  }
 end

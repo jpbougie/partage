@@ -12,7 +12,7 @@ class User
   include DataMapper::Resource
   
   property :id,     Serial
-  property :login,  String
+  property :email,  String
   
-  has n, :shared_files
+  has 1, :folder
 end

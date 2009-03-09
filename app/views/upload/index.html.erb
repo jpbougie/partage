@@ -1,0 +1,19 @@
+<div id="main" class="grid_8">
+  <% if !@shared_files.blank? %>
+    <h2>Your currently shared files</h2>
+    <ul>
+    <% for file in @shared_files %>
+       <li><%= file.filename %></li>
+    <% end %>
+    </ul>
+  <% else %>
+    <h2>No files shared yet</h2>
+  <% end %>
+</div>
+
+<div id="actions" class="grid_4">
+  <h3>Actions</h3>
+  <ul>
+    <li><a href="">Share a new file</a></li>
+  </ul>
+</div>
