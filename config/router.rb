@@ -36,6 +36,9 @@ Merb::Router.prepare do
       
     match("/upload", :method => :post).
       to(:controller => "upload", :action => "upload").name("upload")
+      
+    match("/share").
+      to(:controller => "upload", :action => "share").name("share")
   end
   
   # Adds the required routes for merb-auth using the password slice
