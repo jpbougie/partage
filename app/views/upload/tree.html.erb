@@ -1,0 +1,11 @@
+<div class="grid_12">
+  <h2><%= @folder.name %></h2>
+  
+  <% if !@folder.children.blank? %>
+    <ul>
+    <% for subfolder in @folder.children %>
+      <li><%= subfolder.name %></li>
+    <% end %>
+    </ul>
+  <% end %>
+  

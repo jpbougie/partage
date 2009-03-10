@@ -9,4 +9,6 @@ Merb::Config.use { |c|
   #c[:log_file]  = Merb.root / "log" / "test.log"
   # or redirect logger using IO handle
   c[:log_stream] = STDOUT
+  
+  c[:upload_dir] = Merb.root / "uploads"
 }

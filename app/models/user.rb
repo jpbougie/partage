@@ -15,4 +15,10 @@ class User
   property :email,  String
   
   has 1, :folder
+  
+  def slug
+    self.email.gsub(/@|\./, '-')
+  end
+  
+
 end

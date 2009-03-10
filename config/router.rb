@@ -31,14 +31,27 @@ Merb::Router.prepare do
   # resources :posts
   
   authenticate do
-    match("/").
-      to(:controller => "upload", :action => "index").name("dashboard")
+    with :controller => "upload" do
+      identify(User => :slug) do
+        match("/:user") do
+          match("/").
+            to(:action => "dashboard").name(:dashboard)
+            
+          match(%r{tree(/[^/ ]+)*/?}).
+            to(:action => "tree", :pth => "[1]")
       
-    match("/upload", :method => :post).
-      to(:controller => "upload", :action => "upload").name("upload")
+          match("/upload", :method => :post).
+            to(:action => "create").name(:upload_create)
+
+          match("/share", :method => :get).
+            to(:action => "new").name(:upload_new)
+        end
+      end
       
-    match("/share").
-      to(:controller => "upload", :action => "share").name("share")
+      match('/').to(:action => "index")
+      
+    end
+    
   end
   
   # Adds the required routes for merb-auth using the password slice
@@ -48,7 +61,7 @@ Merb::Router.prepare do
   # This is fine for most cases.  If you're heavily using resource-based
   # routes, you may want to comment/remove this line to prevent
   # clients from calling your create or destroy actions with a GET
-  default_routes
+  #default_routes
   
   # Change this for your home page to be available at /
   # match('/').to(:controller => 'whatever', :action =>'index')
