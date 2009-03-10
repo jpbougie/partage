@@ -8,16 +8,15 @@ class Upload < Application
     redirect(url(:dashboard, :user => session.user))
   end
   
-  def dashboard(user)
-    @folder = session.user.folder
-    display @folder
+  def dashboard
+    redirect(request.path + "/tree")
   end
   
   def tree(user, pth)
     if pth == '/'
       @folder = session.user.folder
     else
-      @folder = pth.split.delete_if {|folder| folder.blank? }.inject {|acc, folder| acc / folder}
+      @folder = pth.split("/").delete_if {|folder| folder.blank? }.inject(session.user.folder) {|acc, folder| acc / folder or raise NotFound}
     end
     
     display @folder

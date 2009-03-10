@@ -37,8 +37,9 @@ Merb::Router.prepare do
           match("/").
             to(:action => "dashboard").name(:dashboard)
             
-          match(%r{tree(/[^/ ]+)*/?}).
-            to(:action => "tree", :pth => "[1]")
+            
+          match(%r{/tree([^\?]*)}).
+            to(:action => "tree", :pth => "[2]").name(:tree)
       
           match("/upload", :method => :post).
             to(:action => "create").name(:upload_create)

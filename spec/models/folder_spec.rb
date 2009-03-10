@@ -21,18 +21,32 @@ describe Folder do
       @folder.children.count.should == 0
     end
     
-    it "should have one if you add it" do
+    it "should have a child if you add it" do
       subfolder = @folder.children.create(:name => "abc")
       
       @folder.children.count.should == 1
       @folder.children.should == [subfolder]
     end
+  end
+  
+  describe "when you have a tree of folders," do
+    before(:each) do
+      @root = Folder.create(:name => "/")
+        @sub1 = Folder.create(:name => "def", :parent => @root)
+          @subsub1 = Folder.create(:name => "ghi", :parent => @sub1)
+          @subsub2 = Folder.create(:name => "jkl", :parent => @sub1)
+        @sub2 = Folder.create(:name => "mno", :parent => @root)
+    end
     
-    it "should be able to navigate to a subfolder" do
-      subfolder = @folder.children.create(:name => "abc")
-
-      (@folder / "abc").should == subfolder
+    it "should be able to navigate to a child" do
+      (@root / "def").should == @sub1
+      (@root / "def" / "jkl").should == @subsub2
+    end
+    
+    it "should give a full path" do
+      @root.full_path.should == "/"
+      @sub1.full_path.should == "/def"
+      @subsub1.full_path.should == "/def/ghi"
     end
   end
-
 end

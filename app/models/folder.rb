@@ -14,4 +14,13 @@ class Folder
     self.children.first(:name => subfolder)
   end
 
+  def full_path
+    if self.parent
+      parent_path = self.parent.full_path
+      parent_path + (parent_path[-1,1] != '/' ? '/' : '') + self.name
+    else
+      self.name
+    end
+  end
+
 end
