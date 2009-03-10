@@ -13,9 +13,7 @@ class User
   
   property :id,     Serial
   property :email,  String
-  
-  has 1, :folder
-  
+    
   def slug
     self.email.gsub(/@|\./, '-')
   end
