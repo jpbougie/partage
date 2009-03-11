@@ -7,7 +7,7 @@ class SharedFile
   property :size, Integer
   property :hash, String, :nullable => false, :format => %r{[\da-f]{40}}
   
-  belongs_to :folder
+  belongs_to :file_set
 
   def file_path
     Merb::Config[:upload_dir] / self.hash[0..1] / self.hash[2..-1]

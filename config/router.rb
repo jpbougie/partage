@@ -27,32 +27,15 @@
 
 Merb.logger.info("Compiling routes...")
 Merb::Router.prepare do
-  # RESTful routes
-  # resources :posts
   
   authenticate do
-    with :controller => "upload" do
-      identify(User => :slug) do
-        match("/:user") do
-          match("/").
-            to(:action => "dashboard").name(:dashboard)
-            
-            
-          match(%r{/tree([^\?]*)}).
-            to(:action => "tree", :pth => "[2]").name(:tree)
-      
-          match("/upload", :method => :post).
-            to(:action => "create").name(:upload_create)
-
-          match("/share", :method => :get).
-            to(:action => "new").name(:upload_new)
-        end
+    resources :users, :identify => :slug, :key => :user_slug do
+      resources :file_sets, :identify => :slug, :key => :file_set_slug do
+        resources :shared_files
       end
-      
-      match('/').to(:action => "index")
-      
     end
     
+    match("/upload").to(:controller => :shared_files, :action => :upload)
   end
   
   # Adds the required routes for merb-auth using the password slice

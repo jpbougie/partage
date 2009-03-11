@@ -1,0 +1,11 @@
+
+
+<% if !@file_sets.blank? %>
+  <ul>
+  <% for item in @file_sets %>
+    <li><%= link_to(item.name, resource(@user, item)) %></li>
+  <% end %>
+  </ul>
+<% else %>
+  
+<% end %>

@@ -1,0 +1,14 @@
+<h1>New set</h1>
+ 
+<%= form_for(@set, :action => resource(:sets) ) do %>
+ 
+  <p>
+    <%= text_field :title, :label => "Name " %>
+  </p>
+ 
+  <p>
+    <%= submit "Create" %>
+  </p>
+<% end =%>
+ 
+<%= link_to 'Back', resource(:sets) %>

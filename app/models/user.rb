@@ -13,10 +13,29 @@ class User
   
   property :id,     Serial
   property :email,  String
+  property :slug,   String
+  
+  has n, :file_sets
     
-  def slug
-    self.email.gsub(/@|\./, '-')
+  before :save, :slugify
+  
+  def default_file_set
+    default = self.file_sets.first(:name => '_default')
+    
+    unless default
+      default = FileSet.new
+      default.name = '_default'
+      default.user = self
+      default.save
+    end
+    
+    default
   end
   
+  protected
+  
+  def slugify
+    self.slug = self.email.downcase.gsub(/[@.]/, '-').gsub(/[^0-9a-z_ -]/i, '').gsub(/\s+/, '-')
+  end
 
 end

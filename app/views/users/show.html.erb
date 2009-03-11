@@ -1,0 +1,26 @@
+<h2 class="grid_12"><%= @user.email %></h2>
+
+<div class="grid_6">
+  <h3>Your files</h3>
+  <% if !@user.default_file_set.shared_files.blank? %>
+    <% for item in @user.default_file_set.shared_files %>
+      <li><%= link_to(item.name, resource(item)) %></li>
+    <% end %>
+  <% else %>
+      No files shared yet
+  <% end %>
+  
+</div>
+
+<div class="grid_6">
+  <h3>Your File Sets</h3>
+<% if !(@user.file_sets - [@user.default_file_set]).blank? %>
+  <ul>
+  <% for item in @user.file_sets - [@user.default_file_set] %>
+    <li><%= link_to(item.name, resource(item)) %></li>
+  <% end %>
+  </ul>
+<% else %>
+  No file sets yet
+<% end %>
+</h3>
