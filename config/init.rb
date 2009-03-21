@@ -8,7 +8,7 @@ use_template_engine :erb
  
 Merb::Config.use do |c|
   c[:use_mutex] = false
-  c[:session_store] = 'cookie'  # can also be 'memory', 'memcache', 'container', 'datamapper
+  c[:session_store] = 'memcache'  # can also be 'memory', 'memcache', 'container', 'datamapper
   
   # cookie session store configuration
   c[:session_secret_key]  = 'c81b212ccf1f7b5fbd0568ef195ea4c23d4f2669'  # required for cookie session store
@@ -27,4 +27,8 @@ Merb::BootLoader.after_app_loads do
   (0..255).each {|n|
     File.makedirs(Merb::Config[:upload_dir] / "%02x" % n)
   }
+  
+  require 'memcache'
+  Merb::MemcacheSession.store = 
+     Memcached.new('127.0.0.1:11211', :namespace => 'partage')
 end

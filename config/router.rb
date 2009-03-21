@@ -34,9 +34,10 @@ Merb::Router.prepare do
         resources :shared_files
       end
     end
-    
-    match("/upload").to(:controller => :shared_files, :action => :upload)
   end
+
+  match("/upload").to(:controller => :shared_files, :action => :upload).fixatable.name(:upload)
+
   
   # Adds the required routes for merb-auth using the password slice
   slice(:merb_auth_slice_password, :name_prefix => nil, :path_prefix => "")

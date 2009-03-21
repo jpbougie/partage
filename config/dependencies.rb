@@ -9,7 +9,7 @@ dependency "merb-action-args", merb_gems_version
 dependency "merb-assets", merb_gems_version  
 dependency("merb-cache", merb_gems_version) do
   Merb::Cache.setup do
-    register(Merb::Cache::FileStore) unless Merb.cache
+    register(:memcached, Merb::Cache::MemcachedStore, :namespace => "partage", :servers => ["127.0.0.1:11211"])
   end
 end
 dependency "merb-helpers", merb_gems_version 
@@ -20,6 +20,7 @@ dependency "merb-auth-more", merb_gems_version
 dependency "merb-auth-slice-password", merb_gems_version
 dependency "merb-param-protection", merb_gems_version
 dependency "merb-exceptions", merb_gems_version
+dependency "merb-haml"
 
 dependency "data_objects", do_gems_version
 dependency "do_sqlite3", do_gems_version # If using another database, replace this

@@ -6,14 +6,17 @@
     <link rel="stylesheet" href="/stylesheets/master.css" type="text/css" media="screen" charset="utf-8" />
     <script src="/javascripts/jquery.js" type="text/javascript" charset="utf-8"></script>
     <script src="/javascripts/swfupload.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/javascripts/upload.js" type="text/javascript" charset="utf-8"></script>
   </head>
   <body>
-    <div id="header" class="container_12">
-        <h1 class="grid_4 suffix_8">Partage</h1>
-    </div>
-    <div id="content" class="container_12">
-      <%#= message[:notice] %>
-      <%= catch_content :for_layout %>
+    <div class="container_12">
+      <div id="header" class="grid_12">
+          <h1>Partage</h1>
+      </div>
+      <div id="content" class="grid_12">
+        <%#= message[:notice] %>
+        <%= catch_content :for_layout %>
+      </div>
     </div>
   </body>
 </html>

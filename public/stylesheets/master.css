@@ -3,8 +3,56 @@
 @import url("960.css");
 
 #header {
-    margin-top: 2em;
+    margin-top: 20px;
+    border-top: 1px solid #aaa;
+    border-left: 1px solid #aaa;
+    border-right: 1px solid #aaa;
+    padding-left: 5px;
+    background: #EBF1F4;
+    color: #555;
+}
+
+#header h1 {
+    font-size: 3em;
+}
+
+#content {
+    background: #fff;
+    border-left: 1px solid #aaa;
+    border-right: 1px solid #aaa;
+    border-bottom: 1px solid #aaa;
+    padding-left: 5px;
 }
 
 body {
+    background: #eee;
+}
+
+h3 {
+    color: #666;
+    font-weight: normal;
+    border-bottom: 1px solid #e5e5e5;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+a {
+    font-weight: bold;
+    color: #6DBCED;
+    text-decoration: none;
+}
+
+ul.file_list {
+    list-style: none;
+}
+
+ul.file_list li {
+    padding: 5px;
+    margin: 5px;
+    background: #f0f0f0;
+    border: solid 1px #e5e5e5;
+}
+
+ul.file_list li a {
+    color: black;
 }

@@ -1,0 +1,37 @@
+.grid_12
+  %button#upload_button
+    Browse
+  #status
+:javascript
+  var swfu;
+
+  $(document).ready(function() {
+    var settings = {
+      flash_url : "/flash/swfupload.swf",
+      upload_url: "/upload?_partage_session_id=#{cookies[:_partage_session_id]}",  // Relative to the SWF file
+      file_size_limit : "100 MB",
+      file_types : "*.*",
+      file_types_description : "All Files",
+      file_upload_limit : 100,
+      post_params : {
+          "file_set" : #{@file_set.id},
+        },
+
+      // Button settings
+      button_width: "75",
+      button_height: "35",
+      button_placeholder_id: "upload_button",
+      button_text: '<span class="browse">Browse</span>',
+      button_text_style: ".browse { font-family:Helvetica; font-size: 14; font-weight: bold; }",
+      button_text_left_padding: 12,
+      button_text_top_padding: 3,
+      
+      file_dialog_complete_handler : Upload.fileDialogComplete,
+      upload_start_handler : Upload.uploadStart,
+      upload_progress_handler : Upload.uploadProgress,
+      upload_error_handler : Upload.uploadError,
+      upload_success_handler : Upload.uploadSuccess,
+    };
+
+    swfu = new SWFUpload(settings);
+     })

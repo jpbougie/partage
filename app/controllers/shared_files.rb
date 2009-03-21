@@ -12,7 +12,11 @@ class SharedFiles < Application
     display @shared_file
   end
 
-  def new
+  def new(user_slug, file_set_slug)
+    @user = User.first(:slug => user_slug)
+    raise NotFound unless @user
+    @file_set = @user.file_sets.first(:slug => file_set_slug)
+    raise NotFound unless @file_set
     only_provides :html
     @shared_file = SharedFile.new
     display @shared_file
@@ -57,14 +61,22 @@ class SharedFiles < Application
   
   def upload
     require 'digest/sha1'
-    @shared_file = SharedFile.new(:filename => params[:file][:file_name],
-                                  :content_type => params[:file][:content_type],
-                                  :size => params[:file][:size],
-                                  :hash => Digest::SHA1.new.file(params[:file][:tempfile]).hexdigest)
-    File.move(params[:file][:tempfile], @shared_file.file_path)
+    
+    @user = User.get(session[:user])
+    raise NotFound unless @user
+    @file_set = @user.file_sets.get(params[:file_set])
+    raise NotFound unless @file_set
+    
+    fl = params[:Filedata]
+    @shared_file = SharedFile.new(:filename => fl[:filename],
+                                  :content_type => fl[:content_type],
+                                  :size => fl[:size],
+                                  :hash => Digest::SHA1.new.file(fl[:tempfile].path).hexdigest,
+                                  :file_set => @file_set)
+    File.move(fl[:tempfile].path, @shared_file.file_path)
     
     if @shared_file.save
-      redirect resource(@shared_file), :message => {:notice => "SharedFile was successfully created"}
+      "ok"
     else
       message[:error] = "SharedFile failed to be created"
       render :new

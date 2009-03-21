@@ -54,5 +54,4 @@ class Users < Application
       raise InternalServerError
     end
   end
-
 end # Users
