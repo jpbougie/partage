@@ -14,21 +14,25 @@
           %li
             %a= friend.email
       .clear
-      - if @file_set == @user.default_file_set
+      - if @file_set.default?
         %ul#set_options.hidden
           %li
             %label
               %input{:type => "radio", :name => "set_action", :value => "files", :checked => true}
               Add them as individual files
-          %li
-            %label
-              %input{:type => "radio", :name => "set_action", :value => "existing_set"}
-              Add them to an existing set
+          - if !(@user.file_sets - [@user.default_file_set]).blank?
+            %li
+              %label
+                %input{:type => "radio", :name => "set_action", :value => "existing_set"}
+                Add them to an existing set
+              %select#file_set.hidden{:name => 'file_set'}
+                - for fs in (@user.file_sets - [@user.default_file_set])
+                  %option{ :value => fs.id }= fs.name
           %li
             %label
               %input{:type => "radio", :name => "set_action", :value => "new_set"}
               Add them to a new set
-              %input#set_name{:type => "text", :name => "set_name", :style => "display: none"}
+              %input#set_name.hidden{:type => "text", :name => "set_name"}
       %input{:type => "submit", :value => "Done"}
 
 :javascript
@@ -64,8 +68,21 @@
 
     swfu = new SWFUpload(settings);
     
+    // change the set action
+    $('input[name=set_action]').change(function() {
+      $('#file_set').addClass('hidden')
+      $('#set_name').addClass('hidden')
+      if($('input[name=set_action][value=existing_set]:checked').length > 0) {
+        $('#file_set').removeClass('hidden')
+      }
+      if($('input[name=set_action][value=new_set]:checked').length > 0) {
+        $('#set_name').removeClass('hidden')
+      }
+    })
+    
+    // form submit
     $('#complete_upload').submit(function() {
-      ids = $('#files > div').map(function(elem) { return Upload.files[elem.attr('id')] }).get.join(',')
+      ids = $('#files > div').map(function() { return Upload.files[$(this).attr('id')].id }).get().join(",")
       $('#complete_upload #shared_files').val(ids)
       
       return true

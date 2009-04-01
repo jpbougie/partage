@@ -1,0 +1,15 @@
+.grid_12
+  %h2
+    = link_to @file_set.user.email, resource(@file_set.user)
+    = "/"
+    = @file_set.name
+
+  %h3 Files
+  %ul
+    - for shared_file in @file_set.shared_files
+      %li= link_to shared_file.filename, resource(@file_set.user, @file_set, shared_file)
+
+  %h3 Shared with
+  %ul
+    - for friend in @file_set.friends
+      %li= friend.email

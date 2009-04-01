@@ -42,6 +42,11 @@ a {
     text-decoration: none;
 }
 
+a:hover {
+    background: #eee;
+    color: #000;
+}
+
 ul.file_list {
     list-style: none;
 }

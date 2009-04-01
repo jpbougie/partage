@@ -1,0 +1,18 @@
+.grid_12
+  %h2
+    = link_to @shared_file.file_set.user.email, resource(@shared_file.file_set.user)
+    = "/"
+    - if !@shared_file.file_set.default?
+      = link_to @shared_file.file_set.name, resource(@shared_file.file_set.user, @shared_file.file_set)
+      = "/"
+    = @shared_file.filename
+
+  - if MIME::Types[@shared_file.content_type][0].media_type == 'image'
+    %img{:src => resource(@shared_file.file_set.user, @shared_file.file_set, @shared_file, :preview)}
+
+  %h2= link_to "download", resource(@shared_file.file_set.user, @shared_file.file_set, @shared_file, :download)
+
+  %h3 Shared with
+  %ul
+    - for friend in @shared_file.friends
+      %li= friend.email

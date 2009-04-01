@@ -20,16 +20,18 @@ class User
   before :save, :slugify
   
   def default_file_set
-    default = self.file_sets.first(:name => '_default')
+    return @default_set if @default_set
     
-    unless default
-      default = FileSet.new
-      default.name = '_default'
-      default.user = self
-      default.save
+    @default_set = self.file_sets.first(:name => '_default')
+    
+    unless @default_set
+      @default_set = FileSet.new
+      @default_set.name = '_default'
+      @default_set.user = self
+      @default_set.save
     end
     
-    default
+    @default_set
   end
   
   def friends

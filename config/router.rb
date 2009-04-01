@@ -31,7 +31,10 @@ Merb::Router.prepare do
   authenticate do
     resources :users, :identify => :slug, :key => :user_slug do
       resources :file_sets, :identify => :slug, :key => :file_set_slug do
-        resources :shared_files
+        resources :shared_files do
+            member :download
+            member :preview
+        end
       end
     end
   end

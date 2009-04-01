@@ -31,7 +31,7 @@ class SharedFiles < Application
 
   def create
     @user = User.get(session[:user])
-    ids = params[:uploaded_files].split(',')
+    ids = params[:shared_files].split(',')
     
     case params[:set_action]
       when 'files'
@@ -39,21 +39,25 @@ class SharedFiles < Application
       when 'existing_set'
         set = @user.file_sets.get(params[:file_set])
       when 'new_set'
-        set = Set.create(:name => params[:set_name])
+        set = FileSet.create(:name => params[:set_name])
         @user.file_sets << set
         set.save
     end
     
-    shares = param[:shares].split(/,\n /).map {|sh| sh.trim }.reject{|sh| sh.blank? }.map do |share|
+    shares = params[:shares].split(/[,\n ]/).map {|sh| sh.strip }.reject{|sh| sh.blank? }.map do |share|
       Friend.first(:email => share) or Friend.create(:email => share)
     end
     
     for shared_file in SharedFile.all(:id => ids)
       shared_file.temp = false
+      Share.share(shared_file, *shares)
       set.shared_files << shared_file
       
       shared_file.save
     end
+    
+    @user.save
+    set.save
     
     redirect resource(@user), :message => {:notice => "The files were successfully shared"}
   end
@@ -88,7 +92,7 @@ class SharedFiles < Application
     
     fl = params[:Filedata]
     @shared_file = SharedFile.new(:filename => fl[:filename],
-                                  :content_type => fl[:content_type],
+                                  :content_type => MIME::Types.of(fl[:filename])[0].content_type,
                                   :size => fl[:size],
                                   :hash => Digest::SHA1.new.file(fl[:tempfile].path).hexdigest,
                                   :file_set => @file_set)
@@ -100,6 +104,28 @@ class SharedFiles < Application
       message[:error] = "SharedFile failed to be created"
       render :new
     end
+  end
+  
+  def download(user_slug, file_set_slug, id)
+    @user = User.get(session[:user])
+    raise NotFound unless @user
+    @file_set = @user.file_sets.first(:slug => file_set_slug)
+    raise NotFound unless @file_set
+    @shared_file = @file_set.shared_files.first(:id => id)
+    raise NotFound unless @shared_file
+    
+    send_file @shared_file.file_path, :filename => @shared_file.filename, :type => @shared_file.content_type
+  end
+
+  def preview(user_slug, file_set_slug, id)
+    @user = User.get(session[:user])
+    raise NotFound unless @user
+    @file_set = @user.file_sets.first(:slug => file_set_slug)
+    raise NotFound unless @file_set
+    @shared_file = @file_set.shared_files.first(:id => id)
+    raise NotFound unless @shared_file
+    
+    send_file @shared_file.file_path, :disposition => 'inline', :filename => @shared_file.filename, :type => @shared_file.content_type
   end
 
 end # SharedFiles

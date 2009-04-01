@@ -13,6 +13,10 @@ class FileSet
   
   before :save, :slugify
   
+  def default?
+    self.name == '_default'
+  end
+  
   protected
   
   def slugify
