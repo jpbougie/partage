@@ -1,6 +1,6 @@
 # dependencies are generated using a strict version, don't forget to edit the dependency versions when upgrading.
-merb_gems_version = "1.0.9"
-dm_gems_version   = "0.9.10"
+merb_gems_version = "1.0.11"
+dm_gems_version   = "0.9.11"
 do_gems_version   = "0.9.11"
 
 # For more information about each component, please read http://wiki.merbivore.com/faqs/merb_components
@@ -17,6 +17,7 @@ dependency "merb-auth-slice-password", merb_gems_version
 dependency "merb-param-protection", merb_gems_version
 dependency "merb-exceptions", merb_gems_version
 dependency "merb-haml"
+dependency "merb-mailer", merb_gems_version
 
 dependency "data_objects", do_gems_version
 dependency "do_sqlite3", do_gems_version # If using another database, replace this
