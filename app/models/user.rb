@@ -32,6 +32,10 @@ class User
     default
   end
   
+  def friends
+    (self.file_sets.shares.friend + self.file_sets.shared_files.shares.friend).uniq
+  end
+  
   protected
   
   def slugify

@@ -13,7 +13,7 @@ class SharedFiles < Application
   end
 
   def new(user_slug, file_set_slug)
-    @user = User.first(:slug => user_slug)
+    @user = User.get(session[:user])
     raise NotFound unless @user
     @file_set = @user.file_sets.first(:slug => file_set_slug)
     raise NotFound unless @file_set
@@ -29,14 +29,33 @@ class SharedFiles < Application
     display @shared_file
   end
 
-  def create(shared_file)
-    @shared_file = SharedFile.new(shared_file)
-    if @shared_file.save
-      redirect resource(@shared_file), :message => {:notice => "SharedFile was successfully created"}
-    else
-      message[:error] = "SharedFile failed to be created"
-      render :new
+  def create
+    @user = User.get(session[:user])
+    ids = params[:uploaded_files].split(',')
+    
+    case params[:set_action]
+      when 'files'
+        set = @user.default_file_set
+      when 'existing_set'
+        set = @user.file_sets.get(params[:file_set])
+      when 'new_set'
+        set = Set.create(:name => params[:set_name])
+        @user.file_sets << set
+        set.save
     end
+    
+    shares = param[:shares].split(/,\n /).map {|sh| sh.trim }.reject{|sh| sh.blank? }.map do |share|
+      Friend.first(:email => share) or Friend.create(:email => share)
+    end
+    
+    for shared_file in SharedFile.all(:id => ids)
+      shared_file.temp = false
+      set.shared_files << shared_file
+      
+      shared_file.save
+    end
+    
+    redirect resource(@user), :message => {:notice => "The files were successfully shared"}
   end
 
   def update(id, shared_file)
@@ -76,7 +95,7 @@ class SharedFiles < Application
     File.move(fl[:tempfile].path, @shared_file.file_path)
     
     if @shared_file.save
-      "ok"
+      @shared_file.to_json
     else
       message[:error] = "SharedFile failed to be created"
       render :new

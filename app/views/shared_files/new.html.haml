@@ -1,7 +1,36 @@
 .grid_12
+  %h3 Add one or more files
+  #files
   %button#upload_button
     Browse
-  #status
+  #share
+    %h3 Share them with others
+    %p Enter a list of e-mails, or take them from the list
+    %form#complete_upload{:method => "POST", :action => resource(@user, @file_set, :shared_files)}
+      %input#shared_files{:type => "hidden", :name => "shared_files", :style => "display: none"}
+      %textarea#shares{:name => "shares"}
+      %ul#known_friends
+        - for friend in @user.friends
+          %li
+            %a= friend.email
+      .clear
+      - if @file_set == @user.default_file_set
+        %ul#set_options.hidden
+          %li
+            %label
+              %input{:type => "radio", :name => "set_action", :value => "files", :checked => true}
+              Add them as individual files
+          %li
+            %label
+              %input{:type => "radio", :name => "set_action", :value => "existing_set"}
+              Add them to an existing set
+          %li
+            %label
+              %input{:type => "radio", :name => "set_action", :value => "new_set"}
+              Add them to a new set
+              %input#set_name{:type => "text", :name => "set_name", :style => "display: none"}
+      %input{:type => "submit", :value => "Done"}
+
 :javascript
   var swfu;
 
@@ -9,7 +38,6 @@
     var settings = {
       flash_url : "/flash/swfupload.swf",
       upload_url: "/upload?_partage_session_id=#{cookies[:_partage_session_id]}",  // Relative to the SWF file
-      file_size_limit : "100 MB",
       file_types : "*.*",
       file_types_description : "All Files",
       file_upload_limit : 100,
@@ -27,6 +55,7 @@
       button_text_top_padding: 3,
       
       file_dialog_complete_handler : Upload.fileDialogComplete,
+      file_queued_handler: Upload.fileQueued,
       upload_start_handler : Upload.uploadStart,
       upload_progress_handler : Upload.uploadProgress,
       upload_error_handler : Upload.uploadError,
@@ -34,4 +63,10 @@
     };
 
     swfu = new SWFUpload(settings);
-     })
+    
+    $('#complete_upload').submit(function() {
+      ids = $('#files > div').map(function(elem) { return Upload.files[elem.attr('id')] }).get.join(',')
+      $('#complete_upload #shared_files').val(ids)
+      
+      return true
+    })})

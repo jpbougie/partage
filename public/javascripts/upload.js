@@ -1,17 +1,29 @@
 var Upload = {
+    
+    files: {},
+    
     uploadStart: function(file) {
-        $('#status').text('Starting')
+    },
+    
+    fileQueued: function(file) {
+        div = $('<div></div>').attr('id', file.id)
+                .append($('<span></span>').addClass('filename').text(file.name))
+                .append($('<span></span>').addClass('status'))
+        $('#files').append(div)
+        
+        if($('#files div').length > 1) {
+            $('#set_options').removeClass('hidden')
+        }
     },
     
     fileDialogComplete: function(numFilesSelected, numFilesQueued) {
-        $('#status').text(numFilesSelected + ' files chosen')
         this.startUpload()
     },
     
     uploadProgress: function(file, bytesLoaded, bytesTotal) {
     	try {
     		var percent = Math.ceil((bytesLoaded / bytesTotal) * 100);
-            $('#status').text( percent + '% uploaded')
+            $('#' + file.id + ' .status').text( percent + '% uploaded')
     	} catch (ex) {
     		this.debug(ex);
     	}
@@ -52,6 +64,7 @@ var Upload = {
 
     
     uploadSuccess: function(file, serverData) {
-        $('#status').text('completed')
+        $('#' + file.id + ' .status').text('completed')
+        Upload.files[file.id] = eval('(' + serverData + ')')
     },
 }

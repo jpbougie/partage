@@ -56,3 +56,19 @@ ul.file_list li {
 ul.file_list li a {
     color: black;
 }
+
+ul#known_friends {
+    float: right;
+}
+
+form ul {
+    list-style: none;
+}
+
+form ul li {
+    margin-left: 5px;
+}
+
+.hidden {
+    display: none;
+}

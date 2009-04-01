@@ -8,6 +8,9 @@ class FileSet
   belongs_to :user
   has n, :shared_files
   
+  has n, :shares, :child_key => [:shareable_id], :shareable_type => self.to_s
+  has n, :friends, :through => :shares, :child_key => [:shareable_id], Share.properties[:shareable_type] => self.to_s
+  
   before :save, :slugify
   
   protected
