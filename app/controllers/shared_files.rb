@@ -1,5 +1,6 @@
 class SharedFiles < Application
   # provides :xml, :yaml, :js
+  provides :json, :xml
 
   def index
     @shared_files = SharedFile.all
@@ -15,6 +16,7 @@ class SharedFiles < Application
   def new(user_slug, file_set_slug)
     @user = User.get(session[:user])
     raise NotFound unless @user
+    raise NotAuthorized unless @user.slug == user_slug
     @file_set = @user.file_sets.first(:slug => file_set_slug)
     raise NotFound unless @file_set
     only_provides :html

@@ -8,12 +8,13 @@
     border-left: 1px solid #aaa;
     border-right: 1px solid #aaa;
     padding-left: 5px;
-    background: #EBF1F4;
+    background: #D5D5D5;
     color: #555;
 }
 
 #header h1 {
     font-size: 3em;
+    letter-spacing: -0.1em;
 }
 
 #content {
@@ -43,8 +44,7 @@ a {
 }
 
 a:hover {
-    background: #eee;
-    color: #000;
+    color: #555;
 }
 
 ul.file_list {
@@ -62,8 +62,51 @@ ul.file_list li a {
     color: black;
 }
 
-ul#known_friends {
-    float: right;
+ul.file_list li a:hover {
+    background: #FEFCA9;
+}
+
+ul.set_list {
+    list-style: none;
+}
+
+ul.set_list li {
+    padding: 5px;
+    margin: 5px;
+    background: #f0f0f0;
+    border: solid 1px #e5e5e5;
+}
+
+ul.set_list li a {
+    color: black;
+}
+
+ul.set_list li a:hover {
+    background: #FEFCA9;
+}
+
+#files {
+    list-style: none;
+}
+
+#files li {
+    padding: 5px;
+    margin: 5px;
+    background: #f0f0f0;
+    border: solid 1px #e5e5e5;
+}
+
+#files li .filename {
+    font-weight: bold;
+}
+
+#files li .status {
+    margin-left: 25px;
+    font-style: italic;
+}
+
+form {
+    padding: 10px 0;
 }
 
 form ul {
@@ -76,4 +119,19 @@ form ul li {
 
 .hidden {
     display: none;
+}
+
+#notice_box {
+    background: rgb(255, 255, 153); /*#FDFDCC*/
+    border: 1px solid #F6D163;
+    padding: 5px 10px;
+    margin: 5px 0;
+    color: #E28742;
+    font-weight: bold;
+}
+
+#notice_box a {
+    float: right;
+    margin-right: 5px;
+    color: #8C5329;
 }

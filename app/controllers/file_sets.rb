@@ -1,5 +1,6 @@
 class FileSets < Application
   # provides :xml, :yaml, :js
+  provides :json
 
   def index(user_slug)
     @user = User.first(:slug => user_slug)

@@ -4,14 +4,16 @@
   - unless @user.default_file_set.shared_files.blank?
     %ul.file_list
       - for item in @user.default_file_set.shared_files.all(:temp => false)
-        %li= link_to item.filename, resource(@user, @user.default_file_set, item)
+        %li
+          = link_to item.filename, resource(@user, @user.default_file_set, item)
+          %span.details= "shared with #{ item.friends.count } #{ item.friends.count <= 1 ? "person" : "people" }"
   - else
     No files shared yet
     
 .grid_6.omega
   %h3 Sets
   - unless (@user.file_sets - [@user.default_file_set]).blank?
-    %ul
+    %ul.set_list
       - for item in @user.file_sets - [@user.default_file_set]
         %li= link_to item.name, resource(@user, item)
   - else

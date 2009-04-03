@@ -1,12 +1,12 @@
 .grid_12
   %h3 Add one or more files
-  #files
+  %ul#files.grid_8.alpha.omega.suffix_4
   %button#upload_button
     Browse
   #share
     %h3 Share them with others
-    %p Enter a list of e-mails, or take them from the list
     %form#complete_upload{:method => "POST", :action => resource(@user, @file_set, :shared_files)}
+      %p Enter a list of e-mails, or take them from the list
       %input#shared_files{:type => "hidden", :name => "shared_files", :style => "display: none"}
       %textarea#shares{:name => "shares"}
       %ul#known_friends
@@ -33,11 +33,9 @@
               %input{:type => "radio", :name => "set_action", :value => "new_set"}
               Add them to a new set
               %input#set_name.hidden{:type => "text", :name => "set_name"}
-      %input{:type => "submit", :value => "Done"}
+      %input{:type => "submit", :value => "Done", :disabled => true }
 
 :javascript
-  var swfu;
-
   $(document).ready(function() {
     var settings = {
       flash_url : "/flash/swfupload.swf",
@@ -64,9 +62,10 @@
       upload_progress_handler : Upload.uploadProgress,
       upload_error_handler : Upload.uploadError,
       upload_success_handler : Upload.uploadSuccess,
+      upload_complete_handler: Upload.uploadComplete,
     };
 
-    swfu = new SWFUpload(settings);
+    Upload.swfObject = new SWFUpload(settings);
     
     // change the set action
     $('input[name=set_action]').change(function() {
@@ -82,7 +81,7 @@
     
     // form submit
     $('#complete_upload').submit(function() {
-      ids = $('#files > div').map(function() { return Upload.files[$(this).attr('id')].id }).get().join(",")
+      ids = $('#files > li').map(function() { return Upload.files[$(this).attr('id')].id }).get().join(",")
       $('#complete_upload #shared_files').val(ids)
       
       return true

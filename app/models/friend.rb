@@ -7,13 +7,33 @@ class Share
   property :shareable_type, String
   
   property :email_sent, Boolean, :default => false
+  property :key, String
   
   belongs_to :friend
+  
+  before :save, :generate_key
   
   def self.share(object, *friends)
     for friend in friends
       Share.create(:shareable_id => object.id, :shareable_type => object.class.to_s, :friend => friend)
     end
+  end
+  
+  protected
+  
+  def generate_key
+    # taken from merb's session
+    # see merb-core/lib/merb-core/dispatch/session.rb#L77
+    values = [
+      rand(0x0010000),
+      rand(0x0010000),
+      rand(0x0010000),
+      rand(0x0010000),
+      rand(0x0010000),
+      rand(0x1000000),
+      rand(0x1000000),
+    ]
+    self.key = "%04x%04x%04x%04x%04x%06x%06x" % values
   end
 end
 

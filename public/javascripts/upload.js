@@ -1,17 +1,18 @@
 var Upload = {
     
     files: {},
-    
+        
     uploadStart: function(file) {
+        $('form#complete_upload input[type=submit]').attr('disabled', true)
     },
     
     fileQueued: function(file) {
-        div = $('<div></div>').attr('id', file.id)
+        li = $('<li></li>').attr('id', file.id)
                 .append($('<span></span>').addClass('filename').text(file.name))
                 .append($('<span></span>').addClass('status'))
-        $('#files').append(div)
+        $('#files').append(li)
         
-        if($('#files div').length > 1) {
+        if($('#files li').length > 1) {
             $('#set_options').removeClass('hidden')
         }
     },
@@ -27,6 +28,13 @@ var Upload = {
     	} catch (ex) {
     		this.debug(ex);
     	}
+    },
+    
+    uploadComplete: function(file) {
+        stats = Upload.swfObject.getStats()
+        if(!stats.in_progress && stats.files_queued == 0) {
+            $('form#complete_upload input[type=submit]').attr('disabled', false)
+        }
     },
     
     uploadError: function(file, errorCode, message) {

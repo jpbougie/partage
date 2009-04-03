@@ -5,7 +5,7 @@
     = @file_set.name
 
   %h3 Files
-  %ul
+  %ul.file_list.grid_8.suffix_4.alpha.omega
     - for shared_file in @file_set.shared_files
       %li= link_to shared_file.filename, resource(@file_set.user, @file_set, shared_file)
 
