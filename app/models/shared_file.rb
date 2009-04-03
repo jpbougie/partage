@@ -16,4 +16,8 @@ class SharedFile
   def file_path
     Merb::Config[:upload_dir] / self.hash[0..1] / (self.hash[2..-1] + '-' + self.size.to_s )
   end
+  
+  def media_type
+    MIME::Types[self.content_type][0].media_type
+  end
 end

@@ -7,7 +7,7 @@
       = "/"
     = @shared_file.filename
 
-  - if MIME::Types[@shared_file.content_type][0].media_type == 'image'
+  - if @shared_file.media_type == 'image'
     %img{:src => resource(@shared_file.file_set.user, @shared_file.file_set, @shared_file, :preview)}
 
   %h2= link_to "download", resource(@shared_file.file_set.user, @shared_file.file_set, @shared_file, :download)
