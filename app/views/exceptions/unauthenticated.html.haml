@@ -1,0 +1,13 @@
+%h3 Please login to access this page
+%div
+  %form#login{ :action => "/login", :method => "POST", "accept-charset" => "utf-8" }
+    %input{ :type => "hidden", :name => "_method", :value => "PUT" }
+    %ul
+      %li
+        %label{ :for => "email" } email
+        %input#email{ :type => "text", :value => "", :name => "email"}
+      %li
+        %label{ :for => "password"} password
+        %input#password{ :type => "password", :value => "", :name => "password"}
+      %li
+        %input{ :type => "submit", :value => "Log in"}

@@ -47,6 +47,21 @@ a:hover {
     color: #555;
 }
 
+form#login label {
+    display: block;
+    font-weight: bold;
+}
+
+form#login input {
+    font-size: 1.5em;
+    border: 1px solid #c5c5c5;
+    color: #555;
+}
+
+form#login input[type=submit] {
+    background-color: #d5d5d5;
+}
+
 ul.file_list {
     list-style: none;
 }
