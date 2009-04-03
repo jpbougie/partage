@@ -1,5 +1,9 @@
 class Application < Merb::Controller
   def index
-    render
+    if session.authenticated?
+      redirect resource(session.user)
+    else
+      render
+    end
   end
 end

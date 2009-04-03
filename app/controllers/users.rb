@@ -1,7 +1,10 @@
 class Users < Application
-  # provsluges :xml, :yaml, :js
+  # provides :xml, :yaml, :js
+
+  before :ensure_authorized, :only => [:show, :edit, :update, :destroy]
 
   def index
+    redirect url(:index)
     @users = User.all
     display @users
   end
@@ -53,5 +56,11 @@ class Users < Application
     else
       raise InternalServerError
     end
+  end
+  
+  protected
+  
+  def ensure_authorized
+    raise Unauthorized unless params[:user_slug] == session.user.slug
   end
 end # Users
