@@ -1,6 +1,8 @@
 class SharedFiles < Application
   # provides :xml, :yaml, :js
   provides :json, :xml
+  
+  before :has_access, :only => [:view, :preview, :download]
 
   def index
     @shared_files = SharedFile.all
@@ -14,8 +16,7 @@ class SharedFiles < Application
   end
 
   def new(user_slug, file_set_slug)
-    @user = User.get(session[:user])
-    raise NotFound unless @user
+    @user = session.user
     raise NotAuthorized unless @user.slug == user_slug
     @file_set = @user.file_sets.first(:slug => file_set_slug)
     raise NotFound unless @file_set
@@ -32,7 +33,7 @@ class SharedFiles < Application
   end
 
   def create
-    @user = User.get(session[:user])
+    @user = session.user
     ids = params[:shared_files].split(',')
     
     case params[:set_action]
@@ -87,8 +88,7 @@ class SharedFiles < Application
   def upload
     require 'digest/sha1'
     
-    @user = User.get(session[:user])
-    raise NotFound unless @user
+    @user = session.user
     @file_set = @user.file_sets.get(params[:file_set])
     raise NotFound unless @file_set
     
@@ -109,7 +109,7 @@ class SharedFiles < Application
   end
   
   def download(user_slug, file_set_slug, id)
-    @user = User.get(session[:user])
+    @user = User.first(:slug => user_slug)
     raise NotFound unless @user
     @file_set = @user.file_sets.first(:slug => file_set_slug)
     raise NotFound unless @file_set
@@ -120,14 +120,35 @@ class SharedFiles < Application
   end
 
   def preview(user_slug, file_set_slug, id)
-    @user = User.get(session[:user])
-    raise NotFound unless @user
+    @user = User.first(:slug => user_slug)
     @file_set = @user.file_sets.first(:slug => file_set_slug)
     raise NotFound unless @file_set
     @shared_file = @file_set.shared_files.first(:id => id)
     raise NotFound unless @shared_file
     
     send_file @shared_file.file_path, :disposition => 'inline', :filename => @shared_file.filename, :type => @shared_file.content_type
+  end
+  
+  def view
+    @shared_file = SharedFile.get(id)
+    raise NotFound unless @shared_file
+    display @shared_file
+  end
+  
+  private
+  
+  def has_access
+    if params[:key]
+      sh = Share.first(:key => params[:key])
+      raise Unauthorized if sh.nil? or !(sh.shareable_type == 'SharedFile' && share.shareable_id == params[:id])
+    elsif session.authenticated?
+      if session.user.slug != params[:user_slug] # a user always has access to its own stuff
+        sh = Share.all(:shareable_type => 'SharedFile', :shareable_id => params[:id]).friend.first(:email => session.user.email)
+        raise Unauthorized unless sh
+      end
+    else
+      raise Unauthorized
+    end
   end
 
 end # SharedFiles
