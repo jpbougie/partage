@@ -1,0 +1,15 @@
+%h3 Register in one simple step
+%div
+  %form#login{ :action => resource(:users), :method => "POST", "accept-charset" => "utf-8" }
+    %ul
+      %li
+        %label{ :for => "email" } email
+        %input#email{ :type => "text", :value => "", :name => "user[email]"}
+      %li
+        %label{ :for => "password"} password
+        %input#password{ :type => "password", :value => "", :name => "user[password]"}
+      %li
+        %label{ :for => "password_confirmation" } confirm your password
+        %input#password_confirmation{ :type => "password", :value => "", :name => "user[password_confirmation]"}
+      %li
+        %input{ :type => "submit", :value => "Register"}

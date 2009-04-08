@@ -16,7 +16,14 @@
   %body
     .container_12
       #header.grid_12
-        %h1 Partage
+        %h1.alpha.grid_8 Partage
+        %div.omega.grid_4
+          - if session.authenticated?
+            logged in as 
+            %strong= session.user.email
+            = link_to "logout", "/logout"
+          - else
+            = link_to "login", "/login"
       #content.grid_12
         - if message[:notice]
           .grid_6.prefix_3.suffix_3.alpha.omega
