@@ -34,10 +34,6 @@ class User
     @default_set
   end
   
-  def friends
-    (self.file_sets.shares.friend + self.file_sets.shared_files.collect {|f| f.friends }.flatten ).uniq
-  end
-  
   protected
   
   def slugify

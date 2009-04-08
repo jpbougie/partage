@@ -43,6 +43,8 @@ class Friend
   
   property :id, Serial
   property :email, String
+  
+  belongs_to :user
 
   has n, :shares
   has n, :set_shares
