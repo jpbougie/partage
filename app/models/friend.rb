@@ -2,22 +2,15 @@ class Share
   include DataMapper::Resource
   
   property :id, Serial
-  
-  property :shareable_id, Integer
-  property :shareable_type, String
-  
   property :email_sent, Boolean, :default => false
   property :key, String
   
   belongs_to :friend
   
-  before :save, :generate_key
+  property :shareable_type, Discriminator
   
-  def self.share(object, *friends)
-    for friend in friends
-      Share.create(:shareable_id => object.id, :shareable_type => object.class.to_s, :friend => friend)
-    end
-  end
+  
+  before :save, :generate_key
   
   protected
   
@@ -37,6 +30,14 @@ class Share
   end
 end
 
+class SetShare < Share
+  belongs_to :file_set
+end
+
+class FileShare < Share
+  belongs_to :shared_file
+end
+
 class Friend
   include DataMapper::Resource
   
@@ -44,7 +45,10 @@ class Friend
   property :email, String
 
   has n, :shares
-  has n, :shared_files, :through => :shares, Share.properties[:shareable_type] => 'SharedFile', :remote_name => :friend
-  has n, :file_sets, :through => :shares, Share.properties[:shareable_type] => 'FileSet', :remote_name => :friend
+  has n, :set_shares
+  has n, :file_shares
+  
+  has n, :file_sets, :through => :set_shares
+  has n, :shared_files, :through => :file_shares
 
 end
