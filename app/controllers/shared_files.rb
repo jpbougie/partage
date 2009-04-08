@@ -36,6 +36,10 @@ class SharedFiles < Application
     @user = session.user
     ids = params[:shared_files].split(',')
     
+    friends = params[:shares].split(/[,\n ]/).map {|sh| sh.strip }.reject{|sh| sh.blank? }.map do |share|
+      Friend.first(:email => share) or Friend.create(:email => share)
+    end
+    
     case params[:set_action]
       when 'files'
         set = @user.default_file_set
@@ -44,16 +48,15 @@ class SharedFiles < Application
       when 'new_set'
         set = FileSet.create(:name => params[:set_name])
         @user.file_sets << set
+        friends.each {|friend| set.shares.create(:friend => friend)}
         set.save
-    end
-    
-    shares = params[:shares].split(/[,\n ]/).map {|sh| sh.strip }.reject{|sh| sh.blank? }.map do |share|
-      Friend.first(:email => share) or Friend.create(:email => share)
     end
     
     for shared_file in SharedFile.all(:id => ids)
       shared_file.temp = false
-      Share.share(shared_file, *shares)
+      if params[:set_action] == 'files'
+        friends.each {|friend| shared_file.shares.create(:friend => friend) }
+      end
       set.shared_files << shared_file
       
       shared_file.save
@@ -138,16 +141,11 @@ class SharedFiles < Application
   private
   
   def has_access
+    shf = SharedFile.get(params[:id])
     if params[:key]
-      sh = Share.first(:key => params[:key])
-      raise Unauthorized if sh.nil? or !(sh.shareable_type == 'SharedFile' && share.shareable_id == params[:id])
-    elsif session.authenticated?
-      if session.user.slug != params[:user_slug] # a user always has access to its own stuff
-        sh = Share.all(:shareable_type => 'SharedFile', :shareable_id => params[:id]).friend.first(:email => session.user.email)
-        raise Unauthorized unless sh
-      end
+      raise Unauthorized unless shf.authorized_with_key? params[:key]
     else
-      raise Unauthorized
+      raise Unauthorized unless (session.authenticated? and shf.authorized_user? session.user)
     end
   end
 

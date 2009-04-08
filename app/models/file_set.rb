@@ -17,6 +17,16 @@ class FileSet
     self.name == '_default'
   end
   
+  def authorized_with_key? passkey
+    !self.shares.first(:passkey => passkey).blank?
+  end
+  
+  def authorized_user? user
+    return true if user == self.file_set.user # a user always has access to its own stuff
+    
+    !self.shares.friend.first(:email => user.email)
+  end
+  
   protected
   
   def slugify

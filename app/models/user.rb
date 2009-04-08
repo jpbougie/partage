@@ -35,7 +35,7 @@ class User
   end
   
   def friends
-    (self.file_sets.shares.friend + self.file_sets.shared_files.shares.friend).uniq
+    (self.file_sets.shares.friend + self.file_sets.shared_files.collect {|f| f.friends }.flatten ).uniq
   end
   
   protected

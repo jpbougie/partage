@@ -3,7 +3,7 @@ class Share
   
   property :id, Serial
   property :email_sent, Boolean, :default => false
-  property :key, String
+  property :passkey, String
   
   belongs_to :friend
   
@@ -26,7 +26,7 @@ class Share
       rand(0x1000000),
       rand(0x1000000),
     ]
-    self.key = "%04x%04x%04x%04x%04x%06x%06x" % values
+    self.passkey = "%04x%04x%04x%04x%04x%06x%06x" % values
   end
 end
 
