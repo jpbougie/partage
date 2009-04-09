@@ -39,7 +39,7 @@ Merb::Router.prepare do
     end
   end
 
-  match("/").to(:controller => :application, :action => :index).name(:index)
+  match("/").to(:controller => :main, :action => :index).name(:index)
   match("/upload").to(:controller => :shared_files, :action => :upload).fixatable.name(:upload)
 
   
