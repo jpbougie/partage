@@ -1,0 +1,17 @@
+.grid_12
+  %h2
+    = link_to @shared_file.file_set.user.email, resource(@shared_file.file_set.user)
+    = "/"
+    - if !@shared_file.file_set.default?
+      = link_to @shared_file.file_set.name, resource(@shared_file.file_set.user, @shared_file.file_set)
+      = "/"
+    = @shared_file.filename
+  
+  - opts = { :id => @shared_file.key }
+  - if params.has_key? :key
+    - opts[:key] = params[:key]
+  - if @shared_file.media_type == 'image'
+    
+    %img{:src => url(:preview, opts)}
+
+  %h2= link_to "download", url(:download, opts)

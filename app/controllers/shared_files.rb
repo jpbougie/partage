@@ -2,7 +2,7 @@ class SharedFiles < Application
   # provides :xml, :yaml, :js
   provides :json, :xml
   
-  before :has_access, :only => [:view, :preview, :download]
+  before :ensure_authorized, :exclude => [:index, :show, :new, :edit, :create, :update, :upload]
 
   def index
     @shared_files = SharedFile.all
@@ -111,36 +111,30 @@ class SharedFiles < Application
     end
   end
   
-  def download(user_slug, file_set_slug, id)
-    @user = User.first(:slug => user_slug)
-    raise NotFound unless @user
-    @file_set = @user.file_sets.first(:slug => file_set_slug)
-    raise NotFound unless @file_set
-    @shared_file = @file_set.shared_files.first(:id => id)
+  def download(id)
+    @shared_file = SharedFile.get(id)
     raise NotFound unless @shared_file
     
     send_file @shared_file.file_path, :filename => @shared_file.filename, :type => @shared_file.content_type
   end
 
-  def preview(user_slug, file_set_slug, id)
-    @user = User.first(:slug => user_slug)
-    @file_set = @user.file_sets.first(:slug => file_set_slug)
-    raise NotFound unless @file_set
-    @shared_file = @file_set.shared_files.first(:id => id)
+  def preview(id)
+    @shared_file = SharedFile.get(id)
     raise NotFound unless @shared_file
     
     send_file @shared_file.file_path, :disposition => 'inline', :filename => @shared_file.filename, :type => @shared_file.content_type
   end
   
-  def view
+  def view(id)
     @shared_file = SharedFile.get(id)
     raise NotFound unless @shared_file
+    
     display @shared_file
   end
   
-  private
+  protected
   
-  def has_access
+  def ensure_authorized
     shf = SharedFile.get(params[:id])
     if params[:key]
       raise Unauthorized unless shf.authorized_with_key? params[:key]

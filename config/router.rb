@@ -32,13 +32,14 @@ Merb::Router.prepare do
     resources :users, :identify => :slug, :key => :user_slug do
       resources :file_sets, :identify => :slug, :key => :file_set_slug do
         resources :shared_files do
-            member :download
-            member :preview
         end
       end
     end
   end
 
+  match("/preview/:id").to(:controller => :shared_files, :action => :preview).name(:preview)
+  match("/download/:id").to(:controller => :shared_files, :action => :download).name(:download)
+  match("/view/:id").to(:controller => :shared_files, :action => :view).name(:view)
   match("/").to(:controller => :main, :action => :index).name(:index)
   match("/upload").to(:controller => :shared_files, :action => :upload).fixatable.name(:upload)
 
