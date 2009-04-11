@@ -35,6 +35,8 @@ var Upload = {
         if(!stats.in_progress && stats.files_queued == 0) {
             $('form#complete_upload input[type=submit]').attr('disabled', false)
         }
+        
+        this.startUpload()
     },
     
     uploadError: function(file, errorCode, message) {
