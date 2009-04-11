@@ -8,12 +8,7 @@
     %form#complete_upload{:method => "POST", :action => resource(@user, @file_set, :shared_files)}
       %p Enter a list of e-mails, or take them from the list
       %input#shared_files{:type => "hidden", :name => "shared_files", :style => "display: none"}
-      %textarea#shares{:name => "shares"}
-      %ul#known_friends
-        - for friend in @user.friends
-          %li
-            %a= friend.email
-      .clear
+      %input#shares{:type => "text", :name => "shares"}
       - if @file_set.default?
         %ul#set_options.hidden
           %li
@@ -85,4 +80,23 @@
       $('#complete_upload #shared_files').val(ids)
       
       return true
-    })})
+    })
+    
+    friends = [#{@user.friends.collect {|f| "{ email: '" + f.email + "', md5: '" + Digest::MD5.hexdigest(f.email) + "'}" }.join(",")}]
+    
+    $('#shares').autocomplete(friends, {
+      multiple: true,
+      formatItem: function(data, i, n, value) {
+        return '<img src="http://www.gravatar.com/avatar/' + data.md5 + '?s=40" />' + data.email
+      },
+      
+      formatResult: function(row) {
+        return row.email
+      },
+      
+      formatMatch: function(row, i, max) {
+        return row.email
+      },
+    })
+    
+    })

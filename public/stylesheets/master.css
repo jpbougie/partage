@@ -120,6 +120,10 @@ ul.set_list li a:hover {
     font-style: italic;
 }
 
+#shares {
+    width: 250px;
+}
+
 form {
     padding: 10px 0;
 }

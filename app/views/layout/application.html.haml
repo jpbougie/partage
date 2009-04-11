@@ -5,9 +5,14 @@
     %title Partage
     %meta{ 'http-equiv' => "content-type", :content => "text/html; charset=utf-8" }
     %link{ :rel => 'stylesheet', :href => '/stylesheets/master.css', :media => 'screen', :charset => 'utf-8' }
+    %link{ :rel => 'stylesheet', :href => '/stylesheets/jquery.autocomplete.css', :media => 'screen', :charset => 'utf-8' }
     %script{ :src => "/javascripts/jquery.js", :type => "text/javascript", :charset => "utf-8" }
     %script{ :src => "/javascripts/swfupload.js", :type => "text/javascript", :charset => "utf-8" }
     %script{ :src => "/javascripts/upload.js", :type => "text/javascript", :charset => "utf-8"}
+    %script{ :src => "/javascripts/jquery.autocomplete.js", :type => "text/javascript", :charset => "utf-8"}
+    %script{ :src => "/javascripts/jquery.ajaxQueue.js", :type => "text/javascript", :charset => "utf-8"}
+    %script{ :src => "/javascripts/jquery.bgiframe.min.js", :type => "text/javascript", :charset => "utf-8"}
+    %script{ :src => "/javascripts/thickbox-compressed.js", :type => "text/javascript", :charset => "utf-8"}
     :javascript
       $(document).ready(function() {
         $('#hide_notice_box').click(function() { $('#notice_box').fadeOut(1000); return false})
