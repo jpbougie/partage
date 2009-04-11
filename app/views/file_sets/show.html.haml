@@ -4,6 +4,8 @@
     = "/"
     = @file_set.name
 
+  %h2= link_to "download as zip", url(:archive, {:id => @file_set.key})
+
   %h3 Files
   %ul.file_list.grid_8.suffix_4.alpha.omega
     - for shared_file in @file_set.shared_files

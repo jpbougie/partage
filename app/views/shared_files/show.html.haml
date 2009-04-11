@@ -7,10 +7,11 @@
       = "/"
     = @shared_file.filename
 
+  - opts = { :id => @shared_file.key }
   - if @shared_file.media_type == 'image'
-    %img{:src => resource(@shared_file.file_set.user, @shared_file.file_set, @shared_file, :preview)}
+    %img{:src => url(:preview, opts)}
 
-  %h2= link_to "download", resource(@shared_file.file_set.user, @shared_file.file_set, @shared_file, :download)
+    %h2= link_to "download", url(:download, opts)
 
   %h3 Shared with
   %ul

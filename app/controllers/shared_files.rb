@@ -2,7 +2,7 @@ class SharedFiles < Application
   # provides :xml, :yaml, :js
   provides :json, :xml
   
-  before :ensure_authorized, :exclude => [:index, :show, :new, :edit, :create, :update, :upload]
+  before :ensure_shared, :only => [:download, :view, :preview]
 
   def index
     @shared_files = SharedFile.all
@@ -22,6 +22,7 @@ class SharedFiles < Application
     raise NotFound unless @file_set
     only_provides :html
     @shared_file = SharedFile.new
+    
     display @shared_file
   end
 
@@ -134,7 +135,7 @@ class SharedFiles < Application
   
   protected
   
-  def ensure_authorized
+  def ensure_shared
     shf = SharedFile.get(params[:id])
     if params[:key]
       raise Unauthorized unless shf.authorized_with_key? params[:key]

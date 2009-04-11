@@ -18,13 +18,13 @@ class FileSet
   end
   
   def authorized_with_key? passkey
-    !self.shares.first(:passkey => passkey).blank?
+    !self.shares.first(:passkey => passkey).nil?
   end
   
   def authorized_user? user
-    return true if user == self.file_set.user # a user always has access to its own stuff
+    return true if user == self.user # a user always has access to its own stuff
     
-    !self.shares.friend.first(:email => user.email)
+    !self.friends.first(:email => user.email).nil?
   end
   
   protected

@@ -37,11 +37,14 @@ Merb::Router.prepare do
     end
   end
 
-  match("/preview/:id").to(:controller => :shared_files, :action => :preview).name(:preview)
-  match("/download/:id").to(:controller => :shared_files, :action => :download).name(:download)
-  match("/view/:id").to(:controller => :shared_files, :action => :view).name(:view)
-  match("/").to(:controller => :main, :action => :index).name(:index)
-  match("/upload").to(:controller => :shared_files, :action => :upload).fixatable.name(:upload)
+  # quasi-public facing views, access to stuff that has been shared
+  match("/preview/:id").to(:controller => :shared_files, :action => "preview").name("preview")
+  match("/download/:id").to(:controller => :shared_files, :action => "download").name("download")
+  match("/view/:id").to(:controller => :shared_files, :action => "view").name("view")
+  match("/archive/:id").to(:controller => :file_sets, :action => "archive").name("archive")
+  
+  match("/").to(:controller => :main, :action => "index").name(:index)
+  match("/upload").to(:controller => :shared_files, :action => "upload").fixatable.name("upload")
 
   
   # Adds the required routes for merb-auth using the password slice

@@ -2,6 +2,8 @@ class FileSets < Application
   # provides :xml, :yaml, :js
   provides :json
 
+  before :ensure_shared, :only => :archive
+
   def index(user_slug)
     @user = User.first(:slug => user_slug)
     raise NotFound unless @user
@@ -65,6 +67,34 @@ class FileSets < Application
       redirect resource(:sets)
     else
       raise InternalServerError
+    end
+  end
+  
+  def archive(id)
+    @file_set = FileSet.get(id)
+    raise NotFound unless @file_set
+    
+    archive_name = "#{@file_set.user.key}-#{@file_set.slug}.zip"
+    archive_path = "/tmp/" + archive_name
+    
+    Zip::ZipFile.open(archive_path, Zip::ZipFile::CREATE) do |zipfile|
+      zipfile.mkdir(@file_set.slug)
+      @file_set.shared_files.each do |shf|
+        zipfile.add(@file_set.slug + '/' + shf.filename, shf.file_path)
+      end
+    end
+    
+    send_file archive_path, :filename => archive_name, :type => 'application/zip'
+  end
+  
+  protected
+  
+  def ensure_shared
+    fs = FileSet.get(params[:id])
+    if params[:key]
+      raise Unauthorized unless fs.authorized_with_key? params[:key]
+    else
+      raise Unauthorized unless (session.authenticated? and fs.authorized_user? session.user)
     end
   end
 
