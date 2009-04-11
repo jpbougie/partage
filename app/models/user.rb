@@ -16,6 +16,7 @@ class User
   property :slug,   String
   
   has n, :file_sets
+  has n, :friends
     
   before :save, :slugify
   
