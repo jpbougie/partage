@@ -154,3 +154,12 @@ form ul li {
     margin-right: 5px;
     color: #8C5329;
 }
+
+a.thumbnail {
+    display: block;
+    margin: auto 0;
+}
+
+a.thumbnail img {
+    padding-left: 30px;
+}
