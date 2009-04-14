@@ -39,6 +39,7 @@ Merb::Router.prepare do
 
   # quasi-public facing views, access to stuff that has been shared
   match("/preview/:id").to(:controller => :shared_files, :action => "preview").name("preview")
+  match("/thumbnail/:id").to(:controller => :shared_files, :action => "thumbnail").name("thumbnail")
   match("/download/:id").to(:controller => :shared_files, :action => "download").name("download")
   match("/view/:id").to(:controller => :shared_files, :action => "view").name("view")
   match("/archive/:id").to(:controller => :file_sets, :action => "archive").name("archive")

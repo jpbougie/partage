@@ -2,7 +2,7 @@ class SharedFiles < Application
   # provides :xml, :yaml, :js
   provides :json, :xml
   
-  before :ensure_shared, :only => [:download, :view, :preview]
+  before :ensure_shared, :only => [:download, :view, :preview, :thumbnail]
 
   def index
     @shared_files = SharedFile.all
@@ -61,6 +61,14 @@ class SharedFiles < Application
       set.shared_files << shared_file
       
       shared_file.save
+      
+      if shared_file.media_type == 'image' then
+        run_later do
+          img = Magick::Image.read(shared_file.file_path).first
+          thumbnail = img.thumbnail(80, 80)
+          thumbnail.write(shared_file.file_path + '-80x80')
+        end
+      end
     end
     
     @user.save
@@ -124,6 +132,13 @@ class SharedFiles < Application
     raise NotFound unless @shared_file
     
     send_file @shared_file.file_path, :disposition => 'inline', :filename => @shared_file.filename, :type => @shared_file.content_type
+  end
+  
+  def thumbnail(id)
+    @shared_file = SharedFile.get(id)
+    raise NotFound unless @shared_file
+    
+    send_file @shared_file.file_path + '-80x80', :disposition => 'inline', :filename => @shared_file.filename, :type => @shared_file.content_type
   end
   
   def view(id)

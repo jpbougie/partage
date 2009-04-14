@@ -33,3 +33,4 @@ dependency "dm-is-tree", dm_gems_version
 dependency "merb_datamapper", merb_gems_version
 
 dependency "rubyzip", :require_as => "zip/zip"
+dependency "rmagick"
