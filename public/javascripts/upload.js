@@ -1,6 +1,12 @@
 var Upload = {
     
     files: {},
+    
+    initialize: function() {
+        $('a.cancel').live('click', function() {
+            $(this).parent('li').remove()
+        })
+    },
         
     uploadStart: function(file) {
         $('form#complete_upload input[type=submit]').attr('disabled', true)
@@ -10,6 +16,7 @@ var Upload = {
         li = $('<li></li>').attr('id', file.id)
                 .append($('<span></span>').addClass('filename').text(file.name))
                 .append($('<span></span>').addClass('status'))
+                .append($('<a href="#">cancel</a>').addClass('cancel'))
         $('#files').append(li)
         
         if($('#files li').length > 1) {
