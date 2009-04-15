@@ -65,7 +65,7 @@ class SharedFiles < Application
       if shared_file.media_type == 'image' then
         run_later do
           img = Magick::Image.read(shared_file.file_path).first
-          thumbnail = img.thumbnail(80, 80)
+          thumbnail = img.thumbnail(80, ((80.0 / img.columns) * img.rows).ceil)
           thumbnail.write(shared_file.file_path + '-80x80')
         end
       end
