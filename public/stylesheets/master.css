@@ -155,11 +155,35 @@ form ul li {
     color: #8C5329;
 }
 
-a.thumbnail {
-    display: block;
-    margin: auto 0;
+ul.gallery li {
+    padding: 5px;
+    margin: 5px;
+    background: #f0f0f0;
+    border: solid 1px #e5e5e5;
 }
 
-a.thumbnail img {
+li.thumbnail a {
+}
+
+li.thumbnail > a:hover {
+    background-color: transparent;
+}
+
+li.thumbnail a div.title {
+    display: none;
+    position: absolute;
+    width: 143px;
+    padding: 2px 2px 2px 5px;
+    margin-left: -5px;
+    margin-top: -5px;
+    background-color: #6DBCED;
+    color: white;
+}
+
+li.thumbnail a:hover div.title {
+    display: block;
+}
+
+li.thumbnail img {
     padding-left: 30px;
 }

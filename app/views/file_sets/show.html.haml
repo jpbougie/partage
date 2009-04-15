@@ -7,13 +7,13 @@
   %h2= link_to "download as zip", url(:archive, {:id => @file_set.key})
 
   %h3 Files
-  %ul.file_list.grid_8.suffix_4.alpha.omega
+  %ul.gallery.grid_8.suffix_4.alpha.omega
     - if @file_set.shared_files.all? {|f| f.media_type == "image" }
       - for shared_file in @file_set.shared_files
-        %li.grid_2
-          %a.thumbnail{ :href => resource(@file_set.user, @file_set, shared_file)}
+        %li.grid_2.thumbnail
+          %a{ :href => resource(@file_set.user, @file_set, shared_file)}
+            .title= shared_file.filename
             %img{ :src => url(:thumbnail, shared_file.key), :width => 80, :height => 80}
-            = shared_file.filename
     - else
       - for shared_file in @file_set.shared_files
         %li= link_to shared_file.filename, resource(@file_set.user, @file_set, shared_file)
