@@ -70,6 +70,13 @@ class FileSets < Application
     end
   end
   
+  def view(id)
+    @file_set = FileSet.get(id)
+    raise NotFound unless @file_set
+    
+    display @file_set
+  end
+  
   def archive(id)
     @file_set = FileSet.get(id)
     raise NotFound unless @file_set

@@ -4,21 +4,20 @@
     = "/"
     = @file_set.name
 
-  %h2= link_to "download as zip", url(:archive, {:id => @file_set.key})
+
+  - options = {:id => @file_set.key}
+  - if params[:key]
+    - options[:key] = params[:key]
+  %h2= link_to "download as zip", url(:archive, options)
 
   %h3 Files
   %ul.gallery.grid_8.suffix_4.alpha.omega
     - if @file_set.shared_files.all? {|f| f.media_type == "image" }
       - for shared_file in @file_set.shared_files
         %li.grid_2.thumbnail
-          %a{ :href => resource(@file_set.user, @file_set, shared_file)}
+          %a{ :href => url(:view, options.merge({:id => shared_file.key }))}
             .title= shared_file.filename
-            %img{ :src => url(:thumbnail, shared_file.key)}
+            %img{ :src => url(:thumbnail, options.merge({:id => shared_file.key }))}
     - else
       - for shared_file in @file_set.shared_files
-        %li= link_to shared_file.filename, resource(@file_set.user, @file_set, shared_file)
-
-  %h3 Shared with
-  %ul
-    - for friend in @file_set.friends
-      %li= friend.email
+        %li= link_to shared_file.filename, url(:view, options.merge({:id => shared_file.key }))

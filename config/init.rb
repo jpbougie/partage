@@ -31,4 +31,13 @@ Merb::BootLoader.after_app_loads do
   require 'memcached'
   Merb::MemcacheSession.store = 
           Memcached.new('127.0.0.1:11211', :namespace => 'partage')
+          
+  require 'smtp-tls'
+  Merb::Mailer.config = {
+    :host   => 'smtp.gmail.com',
+    :port   => '587',
+    :user   => 'test@jpbougie.net',
+    :pass   => '4bcd3fg',
+    :auth   => :plain
+  }
 end

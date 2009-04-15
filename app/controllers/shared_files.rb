@@ -49,7 +49,18 @@ class SharedFiles < Application
       when 'new_set'
         set = FileSet.create(:name => params[:set_name])
         @user.file_sets << set
-        friends.each {|friend| set.shares.create(:friend => friend)}
+        friends.each do |friend| 
+          sh = SetShare.create(:file_set => set, :friend => friend, :email_sent => true)
+          send_mail(ShareMailer, :new_share, {
+            :from => "test@jpbougie.net", 
+            :to => friend.email,
+            :subject => "New shared set from " + session.user.email
+          }, {
+            :type => "set",
+            :name => params[:set_name],
+            :email => session.user.email,
+            :url => url(:view_set, set.key, { :key => sh.passkey }) })
+        end
         set.save
     end
     

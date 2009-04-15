@@ -160,6 +160,7 @@ ul.gallery li {
     margin: 5px;
     background: #f0f0f0;
     border: solid 1px #e5e5e5;
+    height: 100px;
 }
 
 li.thumbnail a {
@@ -178,6 +179,7 @@ li.thumbnail a div.title {
     margin-top: -5px;
     background-color: #6DBCED;
     color: white;
+    opacity: 0.8;
 }
 
 li.thumbnail a:hover div.title {

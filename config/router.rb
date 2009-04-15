@@ -42,6 +42,7 @@ Merb::Router.prepare do
   match("/thumbnail/:id").to(:controller => :shared_files, :action => "thumbnail").name("thumbnail")
   match("/download/:id").to(:controller => :shared_files, :action => "download").name("download")
   match("/view/:id").to(:controller => :shared_files, :action => "view").name("view")
+  match("/view_set/:id").to(:controller => :file_sets, :action => "view").name("view_set")
   match("/archive/:id").to(:controller => :file_sets, :action => "archive").name("archive")
   
   match("/").to(:controller => :main, :action => "index").name(:index)
