@@ -10,5 +10,5 @@ Merb::Config.use { |c|
   # or redirect logger using IO handle
   # c[:log_stream] = STDOUT
   
-  c[:upload_dir] = Merb.root / ".." / "uploads"
+  c[:upload_dir] = Merb.root / ".." / ".." / "uploads"
 }
