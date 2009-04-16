@@ -21,6 +21,7 @@ dependency "merb-mailer", merb_gems_version
 
 dependency "data_objects", do_gems_version
 dependency "do_sqlite3", do_gems_version # If using another database, replace this
+dependency "do_postgres", do_gems_version
 dependency "dm-core", dm_gems_version         
 dependency "dm-aggregates", dm_gems_version   
 dependency "dm-migrations", dm_gems_version   
@@ -33,4 +34,3 @@ dependency "dm-is-tree", dm_gems_version
 dependency "merb_datamapper", merb_gems_version
 
 dependency "rubyzip", :require_as => "zip/zip"
-dependency "rmagick"

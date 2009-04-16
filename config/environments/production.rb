@@ -1,3 +1,5 @@
+dependency "RMagick"
+
 Merb.logger.info("Loaded PRODUCTION Environment...")
 Merb::Config.use { |c|
   c[:exception_details] = false
@@ -8,5 +10,5 @@ Merb::Config.use { |c|
   # or redirect logger using IO handle
   # c[:log_stream] = STDOUT
   
-  c[:upload_dir] = Merb.root / "uploads"
+  c[:upload_dir] = Merb.root / ".." / "uploads"
 }

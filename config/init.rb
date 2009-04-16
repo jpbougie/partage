@@ -28,9 +28,9 @@ Merb::BootLoader.after_app_loads do
     File.makedirs(Merb::Config[:upload_dir] / "%02x" % n)
   }
   
-  require 'memcached'
+  require 'memcache'
   Merb::MemcacheSession.store = 
-          Memcached.new('127.0.0.1:11211', :namespace => 'partage')
+          MemCache.new('127.0.0.1:11211', :namespace => 'partage')
           
   require 'smtp-tls'
   Merb::Mailer.config = {
