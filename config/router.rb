@@ -28,8 +28,8 @@
 Merb.logger.info("Compiling routes...")
 Merb::Router.prepare do
   
-  authenticate do
-    resources :users, :identify => :slug, :key => :user_slug do
+  resources :users, :identify => :slug, :key => :user_slug do
+    authenticate do
       resources :file_sets, :identify => :slug, :key => :file_set_slug do
         resources :shared_files do
         end
@@ -45,7 +45,6 @@ Merb::Router.prepare do
   match("/view_set/:id").to(:controller => :file_sets, :action => "view").name("view_set")
   match("/archive/:id").to(:controller => :file_sets, :action => "archive").name("archive")
   
-  match("/register").to(:controller => :users, :action => "new").name(:register)
   match("/").to(:controller => :main, :action => "index").name(:index)
   match("/upload").to(:controller => :shared_files, :action => "upload").fixatable.name("upload")
 
