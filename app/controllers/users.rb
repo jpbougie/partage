@@ -1,7 +1,8 @@
 class Users < Application
   # provides :xml, :yaml, :js
 
-  before :ensure_authorized, :only => [:show, :edit, :update, :destroy]
+  before :ensure_authenticated, :only => ["show", "edit", "update", "detroy"]
+  before :ensure_authorized, :only => ["show", "edit", "update", "detroy"]
 
   def index
     redirect url(:index)
