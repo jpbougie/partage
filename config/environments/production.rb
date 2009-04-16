@@ -1,4 +1,4 @@
-dependency "RMagick"
+dependency "rmagick", :require_as => 'RMagick.rb'
 
 Merb.logger.info("Loaded PRODUCTION Environment...")
 Merb::Config.use { |c|
