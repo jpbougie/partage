@@ -25,6 +25,6 @@ namespace :deploy do
     after :symlink, :link_configuration
     
     task :restart, :roles => :app, :except => { :no_release => true } do
-      run "MERB_ENV=production thin restart -d --pid #{shared_path}/pids/thin.pid -R #{current_path}/rack.rb -s3 --socket /tmp/partage.sock"
+      run "MERB_ENV=production thin restart -d --pid #{shared_path}/pids/thin.pid -R #{current_path}/config/rack.rb -s3 --socket /tmp/partage.sock"
     end
 end
