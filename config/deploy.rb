@@ -25,8 +25,8 @@ namespace :deploy do
     after :symlink, :link_configuration
     
     task :restart, :roles => :app, :except => { :no_release => true } do
-      run "#{try_sudo} MERB_ENV=production merb -K all -d -a mongrel -e production -m #{current_path} -c 3 -P #{shared_path}/pids/partage.%s.pid"
+      run "#{try_sudo}merb -K all -d -a mongrel -e production -m #{current_path} -c 3 -P #{shared_path}/pids/partage.%s.pid -u partage -G partage"
       
-      run "#{try_sudo} MERB_ENV=production merb -d -a mongrel -e production -m #{current_path} -c 3 -P #{shared_path}/pids/partage.%s.pid"
+      run "#{try_sudo}merb -d -a mongrel -e production -m #{current_path} -c 3 -P #{shared_path}/pids/partage.%s.pid -u partage -G partage"
     end
 end
