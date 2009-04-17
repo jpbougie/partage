@@ -4,7 +4,9 @@ var Upload = {
     
     initialize: function() {
         $('a.cancel').live('click', function() {
-            $(this).parent('li').remove()
+            li = $(this).parent('li')
+            Upload.swfObject.cancelUpload(li.attr('id'))
+            li.remove()
         })
     },
         
