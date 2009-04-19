@@ -64,7 +64,7 @@ class FileSets < Application
       end
     end
     
-    
+    @file_set.to_json
     
   end
 
@@ -106,10 +106,12 @@ class FileSets < Application
     archive_name = "#{@file_set.user.key}-#{@file_set.slug}.zip"
     archive_path = "/tmp/" + archive_name
     
-    Zip::ZipFile.open(archive_path, Zip::ZipFile::CREATE) do |zipfile|
-      zipfile.mkdir(@file_set.slug)
-      @file_set.shared_files.each do |shf|
-        zipfile.add(@file_set.slug + '/' + shf.filename, shf.file_path)
+    unless File.exists? archive_path
+      Zip::ZipFile.open(archive_path, Zip::ZipFile::CREATE) do |zipfile|
+        zipfile.mkdir(@file_set.slug)
+        @file_set.shared_files.each do |shf|
+          zipfile.add(@file_set.slug + '/' + shf.filename, shf.file_path)
+        end
       end
     end
     
