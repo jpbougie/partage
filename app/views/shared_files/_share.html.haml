@@ -1,0 +1,55 @@
+%span#upload_placeholder
+%input#upload_button{ :type => "button", :value => "Choose one or more files"}
+%ul#files
+%h4#narrative
+  These will be shared under
+  %a#set_name.edit Unnamed Set
+  with
+  %input#share_with{ :type => "text", :name => "share_with"}
+  %input#done{ :type => "button", :value => "Done"}
+
+:javascript
+  $(document).ready(function() {
+    
+    // form submit
+    
+    Upload.initialize('#{cookies[:_partage_session_id]}')
+    
+    friends = [#{session.user.friends.collect {|f| "'" + f.email + "'"}.join(", ")}]
+    
+    $('#share_with').autocomplete(friends, {multiple: true,}).result(
+      function(ev, data, formatted) {
+        $('#share_with').before($('<a></a>').addClass('friend').text(formatted).attr("email", formatted)).before('<span class="comma">,</span>')
+        $('#share_with').val('')
+      }).unknownResult(function(ev) {
+          val = $('#share_with').val().replace(/[,;]/, '')
+          $('#share_with').before($('<a></a>').addClass('friend').text(val).attr("email", val)).before('<span class="comma">,</span>')
+          $('#share_with').val('')
+          $('#share_with').focus()
+      })
+    
+      $('.edit').editable(function(value, settings) {
+        return value == "" ? "Unnamed Set" : value
+      }, {height: 10})
+    $('.friend').live('click', function() {
+        $(this).next('.comma').remove()
+        $(this).remove()
+        
+      })
+      
+    $('#done').click(function(event) {
+      if(Upload.isReadyToComplete()) {
+        files = []
+        for(key in Upload.files) {
+          files.push(Upload.files[key].id)
+        }
+      
+        $.post('/create', 
+          { set: $('#set_name').text(),
+            friends: $.map($('a.friend'), function(it) { return $(it).attr('email') }).join(","),
+            files: files.join(","),
+          }, function(data) {}, "json")
+      }
+    })
+    
+    })

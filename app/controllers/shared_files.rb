@@ -38,7 +38,7 @@ class SharedFiles < Application
     ids = params[:shared_files].split(',')
     
     friends = params[:shares].split(/[,\n ]/).map {|sh| sh.strip }.reject{|sh| sh.blank? }.map do |share|
-      Friend.first(:email => share) or Friend.create(:email => share)
+      Friend.first(:email => share, :user => @user) or Friend.create(:email => share, :user => @user)
     end
     
     case params[:set_action]
@@ -74,14 +74,6 @@ class SharedFiles < Application
       set.shared_files << shared_file
       
       shared_file.save
-      
-      if shared_file.media_type == 'image' then
-        run_later do
-          img = Magick::Image.read(shared_file.file_path).first
-          thumbnail = img.thumbnail(80, ((80.0 / img.columns) * img.rows).ceil)
-          thumbnail.write(shared_file.file_path + '-80x80')
-        end
-      end
     end
     
     @user.save
@@ -115,7 +107,7 @@ class SharedFiles < Application
     
     @user = session.user
     @file_set = @user.file_sets.get(params[:file_set])
-    raise NotFound unless @file_set
+    @file_set ||= @user.default_file_set
     
     fl = params[:Filedata]
     @shared_file = SharedFile.new(:filename => fl[:filename],
@@ -126,6 +118,13 @@ class SharedFiles < Application
     File.move(fl[:tempfile].path, @shared_file.file_path)
     
     if @shared_file.save
+      if @shared_file.media_type == 'image' then
+        run_later do
+          img = Magick::Image.read(@shared_file.file_path).first
+          thumbnail = img.thumbnail(80, ((80.0 / img.columns) * img.rows).ceil)
+          thumbnail.write(@shared_file.file_path + '-80x80')
+        end
+      end
       @shared_file.to_json
     else
       message[:error] = "SharedFile failed to be created"

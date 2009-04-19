@@ -62,6 +62,53 @@ form#login input[type=submit] {
     background-color: #d5d5d5;
 }
 
+.swfupload {
+  z-index: 1;
+  position: absolute;
+}
+
+#upload_button {
+  background-color: rgb(250, 253, 210);
+  font-weight: bold;
+  font-size: 1.1em;
+  border: 0;
+  text-decoration: underline;
+  padding-bottom: 3px;
+}
+
+h4 {
+  color: #a5a5a5;
+  font-weight: normal;
+}
+
+a#set_name {
+  border-bottom: 2px dotted #6DBCED;
+}
+
+a.friend:hover {
+  color: #B81104;
+}
+
+input#share_with {
+  font-size: 1em;
+  border: 0;
+  border-bottom: 2px dotted #6DBCED;
+  color: #6DBCED;
+  width: 150px;
+}
+
+input#share_with:focus {
+  border-bottom: 2px dotted #B81104;
+}
+
+input#done {
+  background: rgb(250, 253, 210);
+  font-size: 1em;
+  font-weight: bold;
+  color: #333;
+  border: 1px dotted #ccc;
+}
+
 ul.file_list {
     list-style: none;
 }
@@ -78,7 +125,7 @@ ul.file_list li a {
 }
 
 ul.file_list li a:hover {
-    background: #FEFCA9;
+    background: rgb(250, 253, 210);
 }
 
 ul.set_list {
@@ -97,7 +144,12 @@ ul.set_list li a {
 }
 
 ul.set_list li a:hover {
-    background: #FEFCA9;
+    background: rgb(250, 253, 210);
+}
+
+span.details {
+    color: #888;
+    font-style: italic;
 }
 
 #files {
@@ -141,8 +193,7 @@ form ul li {
 }
 
 #notice_box {
-    background: rgb(255, 255, 153); /*#FDFDCC*/
-    border: 1px solid #F6D163;
+    background: rgb(250, 253, 210); /*#FDFDCC*/
     padding: 5px 10px;
     margin: 5px 0;
     color: #E28742;
@@ -189,3 +240,6 @@ li.thumbnail a:hover div.title {
 li.thumbnail img {
     padding-left: 30px;
 }
+
+a.cancel { float: right; color: #B81104;}
+a.cancel:hover { text-decoration: underline;}

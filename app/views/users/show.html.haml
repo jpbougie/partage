@@ -1,6 +1,9 @@
-.grid_6.alpha
-  %h3 Files
-  = link_to "share a new file", resource(@user, @user.default_file_set, :shared_files, :new)
+.grid_7.alpha
+  %h3 Share
+  #share
+    = partial 'shared_files/share'
+.grid_5.omega
+  %h3 Individual files
   - unless @user.default_file_set.shared_files.blank?
     %ul.file_list
       - for item in @user.default_file_set.shared_files.all(:temp => false)
@@ -9,12 +12,12 @@
           %span.details= "shared with #{ item.friends.count } #{ item.friends.count <= 1 ? "person" : "people" }"
   - else
     No files shared yet
-    
-.grid_6.omega
   %h3 Sets
   - unless (@user.file_sets - [@user.default_file_set]).blank?
     %ul.set_list
       - for item in @user.file_sets - [@user.default_file_set]
-        %li= link_to item.name, resource(@user, item)
+        %li
+          = link_to item.name, resource(@user, item)
+          %span.details= "contains #{ item.shared_files.count } #{ item.friends.count <= 1 ? "file" : "files" }"
   - else
     No sets yet

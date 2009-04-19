@@ -36,6 +36,9 @@ $.fn.extend({
 	result: function(handler) {
 		return this.bind("result", handler);
 	},
+	unknownResult: function(handler) {
+	  return this.bind("unknownResult", handler);
+	},
 	search: function(handler) {
 		return this.trigger("search", [handler]);
 	},
@@ -134,9 +137,10 @@ $.Autocompleter = function(input, options) {
 			case options.multiple && $.trim(options.multipleSeparator) == "," && KEY.COMMA:
 			case KEY.TAB:
 			case KEY.RETURN:
+			  event.preventDefault();
 				if( selectCurrent() ) {
 					// stop default to prevent a form submit, Opera needs special handling
-					event.preventDefault();
+					
 					blockSubmit = true;
 					return false;
 				}
@@ -200,8 +204,10 @@ $.Autocompleter = function(input, options) {
 	
 	function selectCurrent() {
 		var selected = select.selected();
-		if( !selected )
+		if( !selected ) {
+		  $input.trigger("unknownResult")
 			return false;
+		}
 		
 		var v = selected.result;
 		previousValue = v;

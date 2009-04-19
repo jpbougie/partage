@@ -1,7 +1,8 @@
 .ac_results {
-	padding: 0px;
+  padding: 0px;
 	border: 1px solid #D5D5D5;
 	background-color: white;
+	color: #555;
 	overflow: hidden;
 	z-index: 99999;
 }
@@ -24,7 +25,6 @@
 	when scroll mode will be used
 	*/
 	/*width: 100%;*/
-	font: menu;
 	font-size: 12px;
 	/* 
 	it is very important, if line-height not setted or setted 
@@ -43,6 +43,6 @@
 }
 
 .ac_over {
-	background-color: #DDEAFC;
+	background-color: #6DBCED;
 	color: black;
 }

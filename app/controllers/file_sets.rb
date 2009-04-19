@@ -34,16 +34,38 @@ class FileSets < Application
     display @file_set
   end
 
-  def create(user_slug, set)
-    @user = User.first(:slug => user_slug)
-    raise NotFound unless @user
-    @file_set = FileSet.new(set)
-    if @file_set.save
-      redirect resource(@file_set), :message => {:notice => "FileSet was successfully created"}
-    else
-      message[:error] = "FileSet failed to be created"
-      render :new
+  def create
+    @user = session.user
+    @file_set = FileSet.create(:name => params[:set], :user => @user)
+    emails = params[:friends].split(",")
+    
+    
+    friends = Friend.get_or_create(emails, :user => @user)
+    
+    friends.each do |friend|
+      sh = SetShare.create(:file_set => @file_set, :friend => friend, :email_sent => true)
+      run_later do
+        send_mail(ShareMailer, :new_share, {
+          :from => "test@jpbougie.net", 
+          :to => friend.email,
+          :subject => "New shared set from " + @user.email
+        }, {
+          :type => "set",
+          :name => @file_set.name,
+          :email => @user.email,
+          :url => url(:view_set, @file_set.key, { :key => sh.passkey }) })
+      end
+      
+      params[:files].split(",").each do |fid|
+        file = SharedFile.get(fid)
+        file.file_set = @file_set
+        file.temp = false
+        file.save
+      end
     end
+    
+    
+    
   end
 
   def update(user_slug, file_set_slug, set)

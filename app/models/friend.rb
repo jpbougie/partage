@@ -52,5 +52,12 @@ class Friend
   
   has n, :file_sets, :through => :set_shares
   has n, :shared_files, :through => :file_shares
+  
+  def self.get_or_create(emails, params = {})
+    existing = self.all(:email.in => emails)
+    to_create = emails - existing.collect {|f| f.email }
+    
+    existing + to_create.collect{|e| self.create(params.update(:email => e))}
+  end
 
 end
